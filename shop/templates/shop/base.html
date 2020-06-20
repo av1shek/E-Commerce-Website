@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>{% block title%} {% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
+	<!-- bootstrap -->
+	<link href="{% static 'shop/bootstrap//css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'shop/bootstrap//css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+	<link href="{% static 'shop/themes/css/bootstrappage.css' %}" rel="stylesheet" />
+
+	<!-- global styles -->
+	<link href="{% static 'shop/themes/css/flexslider.css' %}" rel="stylesheet" />
+	<link href="{% static 'shop/themes/css/main.css' %}" rel="stylesheet" />
+	<link href="{% static 'shop/themes/css/jquery.fancybox.css' %}" rel="stylesheet"/>
+	<link rel="icon" type="image/png" href="{% static 'shop/themes/images/favicon.ico' %}">
+	<!-- scripts -->
+	<script src="{% static 'shop/themes/js/jquery-1.7.2.min.js' %}"></script>
+	<script src="{% static 'shop/bootstrap//js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'shop/themes/js/superfish.js' %}"></script>
+	<script src="{% static 'shop/themes/js/common.js' %}"></script>
+	<script src="{% static 'shop/themes/js/jquery.scrolltotop.js' %}"></script>
+	<script src="{% static 'shop/themes/js/jquery.fancybox.js' %}"></script>
+
+	<!-- Additional CSS	-->
+	<style>  {% block css %} {% endblock %}  </style>
+</head>
+
+<body>
+
+	<div id="top-bar" class="container">
+		<div id="alert" style="position:fixed; width:77%;" ></div>
+		<div class="row">
+			<div class="span4">
+				<form action="/shop" method="GET" class="search_form" style=" display: inline-flex;">
+					<input type="text" class="input-block-level search-query" style="color: black;" name="query" Placeholder="eg. T-sirt">
+					<button class="navbar-toggler" type="submit" style="border: 0px;
+    background-color: white;"><img src="/media/shop/themes/images/search.png" style="width:30px;"
+						class="site_logo" alt=""></a></button>
+				</form>
+			</div>
+			<div class="span8">
+				<div class="account pull-right">
+					<ul class="user-menu">
+						<li><a href="/shop">Home</a></li>
+						<li><a href="/shop/cart">Your Cart</a></li>
+						<li><a href="/shop/checkout">Checkout</a></li>
+						<li><a href="/shop/track">Track Order</a></li>
+						<li><a href="/shop/contact">Contact us</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="wrapper" class="container">
+		<section class="navbar main-menu">
+			<div class="navbar-inner main-menu">
+				<a href="/shop" class="logo pull-left"><img src="/media/shop/themes/images/logo1.png" style="width:150px;"
+						class="site_logo" alt=""></a>
+			</div>
+		</section>
+		<section class="homepage-slider" id="home-slider">
+			<div class="flexslider">
+				<ul class="slides">
+					<li>
+						<img src="/media/shop/themes/images/carousel/banner-1.jpg" alt="" />
+					</li>
+					<li>
+						<img src="/media/shop/themes/images/carousel/banner-2.jpg" alt="" />
+					</li>
+					<div class="intro">
+								<h1>Explore</h1>
+								<p><span>Explore your true style</span></p>
+							</div>
+				</ul>
+			</div>
+		</section>
+		<section class="header_text">
+
+			</section>
+
+
+		{% block body %}
+
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+		{% endblock %}
+
+
+		</section>
+		<section id="footer-bar">
+			<div class="row">
+				<div class="span3">
+					<h4>Navigation</h4>
+					<ul class="nav">
+						<li><a href="/shop">Homepage</a></li>
+						<li><a href="#">About Us</a></li>
+						<li><a href="/shop/contact">Contac Us</a></li>
+						<li><a href="/shop/cart">Your Cart</a></li>
+						<li><a href="/shop/track">Track Order</a></li>
+					</ul>
+				</div>
+
+				<div class="span5">
+					<p class="logo"><img src="/media/shop/themes/images/logo.png" class="site_logo" alt=""></p>
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the Lorem Ipsum has
+						been the industry's standard dummy text ever since the you.</p>
+					<br />
+					<span class="social_icons">
+
+					</span>
+				</div>
+			</div>
+		</section>
+
+	</div>
+{% csrf_token %}
+	<script src="{% static '/shop/themes/js/common.js' %}"></script>
+	<script src="{% static 'shop/themes/js/jquery.flexslider-min.js' %}"></script>
+	<script type="text/javascript">
+
+// For craousel
+$(function () {
+			$(document).ready(function () {
+				$('.flexslider').flexslider({
+					animation: "fade",
+					slideshowSpeed: 4000,
+					animationSpeed: 600,
+					controlNav: false,
+					directionNav: true,
+					controlsContainer: ".flex-container" // the container that holds the flexslider
+				});
+			});
+		});
+
+
+
+
+
+// Return the quantity of given prouct id with that size and color
+// after fetching from database
+async function checkdb(id, size, color)
+{
+ id = id.slice(2);
+ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+ let type = size + color;
+ let url = '/shop/checkdb/';
+ let data = JSON.stringify({"id": parseInt(id), "type": type });
+ let params = {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json, text/plain',
+        'Content-Type': 'application/json',
+        "X-CSRFToken": csrftoken },
+    }
+
+await fetch(url, params).then(response => response.json()).then(data => {qnty=data; return qnty;} );
+return qnty
+}
+</script>
+	{% block js %}
+	{% endblock %}
+
+
+
+</body>
+
+</html>

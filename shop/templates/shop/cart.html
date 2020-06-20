@@ -1,0 +1,156 @@
+{% extends 'shop/base.html' %}
+{% block title%}Your Cart{% endblock %}
+{% block css %}
+.icon-img {
+    display: block;
+    max-width:100px;
+    max-height:100px;
+    width: auto;
+    height: auto;
+}
+@media (max-width: 767px){
+			#top-bar,#wrapper,#footer-bar,#copyright, #body{
+				width: fit-content;
+				margin:0px;
+				padding:0px;
+			}
+			.input-mini{
+				width: 30px;
+			}
+			.hide_det{
+				display:none;
+		}
+			select {
+				width: 50px;
+			}
+		}
+{% endblock %}
+{% block body %}
+
+		<section class="main-content">
+			<div class="row">
+				<div class="span12">
+					<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+
+								<th class="hide_det">Image</th>
+								<th>Product Details</th>
+								<th>Quantity</th>
+								<th>Remove</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>  </tbody>
+					</table>
+
+					<p class="buttons center">
+						<button class="btn" type="button"><a href="/shop" style="color:black">Continue</a></button>
+						<button class="btn btn-inverse" type="submit" id="checkout" onclick="fun()" href="/shop/checkout/"><a href="/shop/checkout/" style="color:white">Checkout</a> </button>
+					</p>
+				</div>
+
+			</div>
+		</section>
+
+{% endblock %}
+{% block js %}
+<script>
+let totalprice=0;
+fun();
+// Alert and redirect if cart is empty
+function fun()
+{	cart = JSON.parse(localStorage.getItem('cart'));
+	if (cart == null || (Object.keys(cart).length) == 0) {
+    alert('Your cart is empty. Please add some products in your cart.');
+    document.location = "/shop";
+	}
+}
+
+// Populate the DOM with cart items
+function update()
+{
+	totalprice=0;
+	$('tbody')[0].innerHTML = "";
+	cart = JSON.parse(localStorage.getItem('cart'));
+	for(let product in cart)
+	{
+		$('tbody')[0].innerHTML += `<tr>
+								 <td class="hide_det"> <a href="product_detail.html"> <img class="icon-img" alt="" src=${cart[product][0]}> </a> </td>
+	  							<td><h5>${cart[product][1]}</h5><br><strong>Size:</strong><span>${cart[product][4]}</span><br><strong>Color:</strong><span>${cart[product][5]}</span><br><strong>Price:</strong><span>${cart[product][3]}</span></td>
+								<td><div class="btn-group" role="group" aria-label="Basic example">
+										<button type="button" class="btn btn-secondary" id="${product}-p" style="height:30px;" onclick="incr('${product}', this)">+</button>
+										<button type="button" class="btn btn-secondary" style="height:30px; padding: 0px;"> <div id="${product}" value=${cart[product][2]} class="input-mini" style=" display:inline-flex height:auto; margin:0px; padding:0px; text-align:center; width:30px;"> ${cart[product][2]} </div> </button>
+										<button type="button" class="btn btn-secondary" id="${product}-m" style="height:30px;" onclick="decr('${product}', this)">-</button>
+									  </div></td>
+									<td><button class="btn btn-primary" onclick="remove('${product}')"></button></td>
+								<td>${parseInt(cart[product][3])*parseInt(cart[product][2])}</td>
+							</tr>`
+		 	totalprice += parseInt(cart[product][3])*parseInt(cart[product][2])
+	 	}
+	 	$('tbody')[0].innerHTML += `<tr>
+								 <td class="hide_det">&nbsp;</td>
+								<td></td>
+								<td></td>
+								<td><strong>Grand Total</strong></td>
+								<td>Rs ${totalprice}</td>
+							</tr>`
+	 }
+
+// Increase the quantity of selected product after checking
+// its availability in database
+function incr(item, e)
+{
+	 let id = e.id.split("-")[0]
+	 let size = e.id.split("-")[1]
+	 let color = e.id.split("-")[2]
+	 cart = JSON.parse(localStorage.getItem('cart'));
+	 checkdb(id, size, color).then(qnty_avl =>{
+	 if(qnty_avl > parseInt(cart[item][2]) )
+	 {
+	 		cart[item][2] = parseInt(cart[item][2]) + 1;
+	 		$('#' + item)[0].innerText = cart[item][2];
+	 		localStorage.setItem('cart', JSON.stringify(cart));
+	 		update();
+	 }
+	 else
+	 {
+	 		alert("Sorry! No more quantity available.");
+	 }
+	 });
+}
+
+// Decrease the quantity of selected product
+function decr(item, e)
+{
+	 cart = JSON.parse(localStorage.getItem('cart'));
+	if(parseInt(cart[item][2]) > 1)
+	{
+	 	cart[item][2] = parseInt(cart[item][2]) - 1;
+	 	$('#' + item)[0].innerText = cart[item][2];
+	 	localStorage.setItem('cart', JSON.stringify(cart));
+	}
+	else
+	 {
+	 	delete cart[item];
+	 	localStorage.setItem('cart', JSON.stringify(cart));
+	 	update();
+	 }
+	 update();
+}
+
+// Delete the item from cart
+function remove(item)
+{
+	 cart = JSON.parse(localStorage.getItem('cart'));
+	 delete cart[item];
+	 localStorage.setItem('cart', JSON.stringify(cart));
+	 update();
+}
+
+// Display the cart items on loading page
+update();
+</script>
+
+{% endblock %}
