@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title%}SignUp{% endblock %}
+{% block body %}
+
+{% if email_sent %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  Please <strong>verify your email address</strong>. Further instructions has been sent to your mail.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% elif email_verified%}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Thank you </strong>for your email confirmation. Now you can login your account.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% elif invalid_link %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Sorry </strong>link is invalid. Please try again.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+<div class="container">
+  <div class="row mx-auto">
+    <div class="col-12 col-md-6 mt-4">
+      <form id="Regform" action="{% url 'accounts:signup' %}" method="POST" class="form_css_signup">
+        {% csrf_token %}
+          {% if messages %}
+            <div id="message">
+              {% for message in messages %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" name="username" maxlength="150" autofocus required>
+          </div>
+          
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" name="email" required>
+          </div>
+          
+          <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" name="password1" autocomplete="new-password" required>
+          </div>
+
+          <div class="form-group">
+              <label for="repassword">Password Confirmation</label>
+              <input type="password" class="form-control" name="password2" autocomplete="new-password" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="firstName">First Name</label><br>
+            <input type="text" class="form-control" name="fname" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lastNme">Last Name</label><br>
+            <input type="text" class="form-control" name="lname">
+          </div>
+
+          <div class="form-group">
+            <label for="mobileNum">Mobile Number</label><br>
+            <input type="text" class="form-control" name="mobno" required>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label><br>
+            <input type="text" class="form-control" name="address">
+          </div>
+
+          <div class="form-group">
+            <label for="city">City</label><br>
+            <input type="text" class="form-control" name="city">
+          </div>
+
+          <div class="form-group">
+            <label for="zip_code">Zip Code</label><br>
+            <input type="text" class="form-control" name="zip_code">
+          </div>
+
+          <div class="form-group">
+            <label for="state">State</label><br>
+            <input type="text" class="form-control" name="state">
+          </div>
+          
+
+        <Button class="text-light mt-3"  style="background-color: rgba(14, 56, 84, 0.79); width:100%; border-radius:1cm;" type="submit">SignUp</Button>
+        <p class="text-center">
+          Already have an account ?<a href="#" data-toggle="modal" data-target="#loginModal"> Login here </a>
+        </p>
+      </form>
+    </div>
+    
+    <div class="col-12 col-md-4 mt-4">
+      <h1>Rules</h1><hr>
+      <h4>Username</h4>
+      <small style="">
+        <ul>
+          <li>Required. 150 characters or fewer.</li>
+          <li>Letters, digits and @/./+/-/_ only.</li>
+        </ul>
+      </small>
+      <h4>Password</h4>
+      <small style="">
+        <ul>
+          <li>Your password can’t be too similar to your other personal information.</li>
+          <li>Your password must contain at least 8 characters.</li>
+          <li>Your password can’t be a commonly used password.</li>
+          <li>Your password can’t be entirely numeric.</li>
+        </ul>
+      </small>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock body %}
+    {% block js %} 
+    <script>
+    $(document).ready(function () 
+    {
+      setTimeout(dismissAllAlert, 9000);
+      function dismissAllAlert()
+      {
+        allAlerts = document.getElementsByClassName('close');
+        let i =0;
+        for(i = 0;i<allAlerts.length;i++)
+        {
+          allAlerts[i].click();
+        }
+      }
+      
+      
+    
+    });
+    </script>
+    {% endblock %}
+

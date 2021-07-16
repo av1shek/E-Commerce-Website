@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  {% if user.is_authenticated %}
+  <div class="container">
+    <h2>Welcome, {{ user.get_full_name }} <small>{{ user.username }}</small>!</h2>
+    <p>Your email address: {{ user.email }}</p>
+  </div>
+  {% else %}
+  <div class="container">
+    <h1>Something went wrong</h1>
+    <h1>Please login again to view this page</h1>
+  </div>
+  {% endif %}
+
+{% endblock %}

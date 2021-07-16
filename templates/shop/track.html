@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+{% block title%}Track Order{% endblock %}
+{% block body %}
+<form action="/shop/track/" method="post">{% csrf_token %}
+  <div class="form-group">
+    <label style="font-size: large;">Enter your Order Id</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="orderid" placeholder="Order Id" required><br>
+    <small id="emailHelp" class="form-text text-muted">We'll never share your credentials with anyone else.</small>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div style="font-size: large; display:none;" id="orderstatus"></div>
+
+{% endblock %}
+	{% block js %}
+<script>
+// Display the result if response is sent by server
+    {% if thank %}
+    let messagediv = document.getElementById("orderstatus");
+    messagediv.style.display = "block";
+    messagediv.innerText= `{{message}}`;
+    {% endif %}
+</script>
+{% endblock %}

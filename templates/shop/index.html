@@ -1,0 +1,70 @@
+{% extends 'shop/base.html' %}
+{% block title%}Winter Hoodies{% endblock %}
+{% block body %}
+<section class="main-content">
+	<h3>Top Deals</h3>
+	<hr>
+			<div class="row" style="margin-left: 0px;">
+				<ul class="thumbnails">
+
+					{% if itemcount == 0 %}
+
+					<li>
+						<div class="product-box">
+							<h3>No Results found</h3>
+
+
+						</div>
+					</li>
+
+   					{%  else  %}
+
+					{% for i in items%}
+
+					<li class="span3">
+						<div class="product-box">
+							<span class="sale_tag"></span>
+							<p><a href="detail/{{i.id}}"><img src="/media/{{i.image}}" alt="" /></a></p>
+							<a href="detail/{{i.id}}" class="title">{{i.product_name}}</a><br />
+							<a href="detail/{{i.id}}" class="category">{{i.tagline}}</a>
+							<p class="price">₹ {{i.price}}</p>
+						</div>
+					</li>
+
+					{% endfor %}
+				{% endif %}
+
+				</ul>
+				{% if items.has_other_pages %}
+				<div class="pagination pagination-small pagination-centered">
+					<ul>
+						{% if items.has_previous %}
+							<li><a href="?page={{ items.previous_page_number }}">Prev</a></li>
+						{% else %}
+      						<li class="disabled"><a href="#">Prev</a></li>
+						{% endif %}
+						{% for i in items.paginator.page_range %}
+      						{% if items.number == i %}
+						 		<li class="active"><a href="#">{{i}}</a></li>
+							{% else %}
+        						<li><a href="?page={{ i }}">{{i}}</a></li>
+      						{% endif %}
+						{% endfor %}
+    						{% if items.has_next %}
+								<li><a href="?page={{ items.next_page_number }}">Next</a></li>
+							{% else %}
+      							<li class="disabled"><a href="#">Next</a></li>
+						    {% endif %}
+					</ul>
+				</div>
+				{% endif %}
+
+
+
+			</div>
+
+</section>
+{% endblock %}
+{% block js %}
+
+{% endblock %}

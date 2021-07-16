@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import Customer
 
 # Create your models here.
 class Product(models.Model):
@@ -56,3 +57,8 @@ class Message(models.Model):
 class OrderStatus(models.Model):
     orderid = models.CharField(max_length=1000, default="")
     orderstatus = models.CharField(max_length=1000)
+
+
+class Cart(models.Model):
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True)
+    items_json = models.CharField(max_length=4000)
