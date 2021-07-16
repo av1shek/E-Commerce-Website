@@ -7,9 +7,8 @@ import json
 import smtplib
 from django.views.decorators.csrf import csrf_exempt
 from PayTm import Checksum
+from winter.settings import MERCHANT_KEY, MID
 
-
-MERCHANT_KEY = 'YOUR-MERCHANT-KEY'
 orderObj = None
 
 
@@ -62,7 +61,7 @@ def checkdb(request):
 
 # Generate receipt
 def receipt(request, orderid):
-    order = Orders.objects.filter(order_id=int(orderid[3:]))[0]
+    order = Orders.objects.filter(order_id=int(orderid.split('-')[1]))[0]
     items_json = json.loads(order.items_json)
     customer_name = order.fname + " " + order.lname
     address = order.address
@@ -221,13 +220,13 @@ def checkout(request):
         # print("total price is ", totalprice)
         order_id = getOrderId()
         orderObj = Orders(order_id=order_id, items_json=itemsjson, fname=fname, lname=lname, branch=branch, reg_id=reg_id, mobno=mobno, email=email, address=address, city=city, zip_code=zip_code, state=state, comment=comment, amount=totalprice)
-        order_id = "WH-" + str(order_id)
+        order_id = "WHT-" + str(order_id)
         print(order_id)
 
         # Request paytm to transfer the amount to your account after payment by
         # change callback url at time of production
         param_dict = {
-            'MID': 'YOUR-MERCHANT-ID',
+            'MID': MID,
             'ORDER_ID': str(order_id),
             'TXN_AMOUNT': str(totalprice),
             'CUST_ID': email,
