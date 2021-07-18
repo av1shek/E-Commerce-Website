@@ -1,7 +1,7 @@
 {% extends 'shop/base.html' %}
 {% block title%}Track Order{% endblock %}
 {% block body %}
-<form action="/shop/track/" method="post">{% csrf_token %}
+<form action="{% url 'shop:track' %}" method="post">{% csrf_token %}
   <div class="form-group">
     <label style="font-size: large;">Enter your Order Id</label>
     <input type="text" class="form-control" id="exampleInputEmail1" name="orderid" placeholder="Order Id" required><br>

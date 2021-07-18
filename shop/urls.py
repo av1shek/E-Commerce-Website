@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+app_name='shop'
+
 urlpatterns = [
     path('', views.index, name="shop"),
     path('detail/<int:myid>', views.product_details, name="detail"),
@@ -11,5 +13,6 @@ urlpatterns = [
     path('contact/', views.contact, name="contact"),
     path('track/', views.track, name="track"),
     path('receipt/<str:orderid>', views.receipt, name="receipt"),
-    path('handlerequest/', views.handlerequest, name="Handlerequest"),
+    path('handlerequest/', views.handlerequest, name="handlerequest"),
+    path('test/', views.test, name="test"),
 ]

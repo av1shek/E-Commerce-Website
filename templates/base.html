@@ -40,7 +40,7 @@
           <form class="form-inline my-2 my-lg-0">
           {% if user.is_authenticated %}
             <button class="btn btn-secondary my-2 my-sm-0 mr-1" type="button" id="resetBtn" data-toggle="modal" data-target="#passwdResetModal">Reset Password</button>
-            <a class="btn btn-secondary my-2 my-sm-0 mr-1" type="button" href="/logout/">Logout</a>
+            <a class="btn btn-secondary my-2 my-sm-0 mr-1" type="button" href="{% url 'accounts:logout' %}">Logout</a>
           {% else %}
             <button class="btn btn-secondary my-2 my-sm-0 mr-1" type="button" id="loginBtn" data-toggle="modal" data-target="#loginModal">Login</button>
             <a class="btn btn-secondary my-2 my-sm-0 mr-1" type="button" href="{% url 'accounts:signup' %}">SignUp</a>
@@ -53,107 +53,106 @@
     <!-- Navbar end -->
 
     <div class="container">
-
-        <!-- Login Modal -->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-            
+          <!-- Login Modal -->
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
                     <div class="main_div_login">
-                        <div class="disappear_login"><img class="for_img_login" src="{% static 'accounts/img/login_img.svg' %}" alt="login" /></div>
-                        <hr/>
-                        <div class="container mt-4">
-                            <form id="Regform" action="{% url 'accounts:login' %}" method="POST" class="form_css_login">
-                                <div class="form-group">
-                                {% csrf_token %}
-                                {% if messages %}
-                                <div id="message">
-                                  {% for message in messages %}
-                                    <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
-                                  {% endfor %}
-                                </div>
-                                {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" name="username" class="form-control" id="username" required />
-                                </div>
+                      <div class="disappear_login"><img class="for_img_login" src="{% static 'accounts/img/login_img.svg' %}" alt="login" />
+                      </div>
+                      <hr/>
+                      <div class="container mt-4">
+                        <form id="Regform" action="{% url 'accounts:login' %}" method="POST" class="form_css_login">
+                          <div class="form-group">
+                            {% csrf_token %}
+                            {% if messages %}
+                            <div id="message">
+                              {% for message in messages %}
+                                <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+                              {% endfor %}
+                            </div>
+                            {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" class="form-control" id="username" required />
+                            </div>
 
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password">
-                                </div>
-                                <button type="submit" style="background-color: rgba(14, 56, 84, 0.79); width:100%; border-radius:1cm;" class="text-light mt-3">Login</button>
-                                <div class="form-group pt-3">
-                                  <p class="font-weight-lighter text-center">
-                                    Don't have an account?<br/>
-                                    <span class="text-dark font-weight-bold">Register</span> <a href="{%url 'accounts:signup' %}">here</a>
-                                  </p>
-                                  <p class="font-weight-lighter text-center">
-                                    <a href="#" data-toggle="modal" data-target="#passwdResetModal"> Forgot Password ?</a>
-                                    <!-- <a href="{% url 'accounts:password_reset' %}" class="text-dark font-weight-bold">Forgot Password ?</a> -->
-                                    
-                                  </p>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password">
+                            </div>
+                            <button type="submit" style="background-color: rgba(14, 56, 84, 0.79); width:100%; border-radius:1cm;" class="text-light mt-3">Login</button>
+                            <div class="form-group pt-3">
+                              <p class="font-weight-lighter text-center">
+                                Don't have an account?<br/>
+                                <span class="text-dark font-weight-bold">Register</span> <a href="{%url 'accounts:signup' %}">here</a>
+                              </p>
+                              <p class="font-weight-lighter text-center">
+                                <a href="#" data-toggle="modal" data-target="#passwdResetModal"> Forgot Password ?</a>
+                                <!-- <a href="{% url 'accounts:password_reset' %}" class="text-dark font-weight-bold">Forgot Password ?</a> -->
+                                
+                              </p>
+                            </div>
+                          </div>
+                        </form>
                       </div>
                     </div>
 
+                  </div>
             </div>
         </div>
 
         <!-- Password Reset Modal -->
         <div class="modal fade" id="passwdResetModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-          
-                  <div class="main_div_login">
-                      <div class="disappear_login"><img class="for_img_login" src="{% static 'img/password_reset.svg' %}" alt="login" /></div>
-                      <hr/>
-                      <div class="container">
-                          <form id="resetform" action="{% url 'accounts:password_reset' %}" method="POST" class="form_css_reset">
-                              {% csrf_token %} 
-
-                              <div class="form-group">
-                                  <label for="email">Email</label>
-                                  <input type="email" name="email" autocomplete="email" maxlength="254" class="form-control" required />
-                              </div>
-                              <button type="submit" style="background-color: rgba(14, 56, 84, 0.79); width:100%; border-radius:1cm;" class="text-light mt-3">Reset</button>
-                          </form>
-
-                      </div>
-                    </div>
+            <div class="modal-content">
+              <div class="main_div_login">
+                  <div class="disappear_login"><img class="for_img_login" src="{% static 'img/password_reset.svg' %}" alt="login" />
                   </div>
+                  <hr/>
+                  <div class="container">
+                    <form id="resetform" action="{% url 'accounts:password_reset' %}" method="POST" class="form_css_reset">
+                          {% csrf_token %} 
 
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" autocomplete="email" maxlength="254" class="form-control" required />
+                        </div>
+
+                        <button type="submit" style="background-color: rgba(14, 56, 84, 0.79); width:100%; border-radius:1cm;" class="text-light mt-3">Reset</button>
+                    </form>
+                  </div>
+              </div>
+            </div>
           </div>
-      </div>
+        </div>
 
     </div>
     
-  {% block body %}
+    {% block body %}
 
-				
-	{% endblock %}
-
-
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <!-- Additional JavaScript -->
-    {% block js %} 
-    <script>
-    $(document).ready(function () {
-    loginBtn = document.getElementById("loginBtn");
-    {% if messages and user_login %}
-        loginBtn.click()
-    {% endif %}
-    });
-    </script>
+          
     {% endblock %}
+
+
+
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+      <!-- Additional JavaScript -->
+      {% block js %} 
+      <script>
+        $(document).ready(function () {
+        loginBtn = document.getElementById("loginBtn");
+        {% if messages and user_login %}
+            loginBtn.click()
+        {% endif %}
+        });
+      </script>
+      {% endblock %}
   </body>
 </html>

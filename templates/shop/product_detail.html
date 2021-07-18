@@ -155,7 +155,7 @@ function additem(idstr)
 			if (cart[idstr] !=undefined)  { cart[idstr][2] = parseInt(cart[idstr][2]) + parseInt(qnty); }
 			else  { cart[idstr] = [product_img, product_name, qnty, product_price, complete_word(size), complete_word(color), id, size+color];  }
 			localStorage.setItem('cart', JSON.stringify(cart));
-			window.location.href = "/shop/cart/"
+			window.location.href = "{% url 'shop:cart' %}"
 		}
 	else{ alert("Sorry! No more quantity available.");   }
 	}

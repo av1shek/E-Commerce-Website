@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse  
 from django.db.models import Q
 from .models import Product, Orders, Message, OrderStatus
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -6,6 +7,7 @@ from django.http import HttpResponse
 import json
 import smtplib
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from PayTm import Checksum
 from winter.settings import MERCHANT_KEY, MID
 
@@ -15,6 +17,7 @@ orderObj = None
 # Display the home page after fetching products
 # from Product table according to search query if searched
 # else all products
+# @login_required
 def index(request):
     products = Product.objects.all()
     if(request.method=="GET"):
@@ -233,9 +236,12 @@ def checkout(request):
             'INDUSTRY_TYPE_ID': 'Retail',
             'WEBSITE': 'WEBSTAGING',
             'CHANNEL_ID': 'WEB',
-            'CALLBACK_URL': 'http://127.0.0.1:8000/shop/handlerequest/',
+            'CALLBACK_URL': 'http://127.0.0.1:8000/handlerequest/',
         }
         param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
         return render(request, 'shop/paytm.html', {'param_dict': param_dict})
     return render(request, 'shop/checkout.html')
 
+
+def test(request):
+    return render(request, 'shop/base.html')

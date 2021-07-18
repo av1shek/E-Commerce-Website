@@ -23,7 +23,7 @@ def home(request):
 
 def user_login(request):
     if request.user.is_authenticated:
-        return redirect('accounts:home')
+        return redirect('shop:shop')
 
     if request.method == "POST":
         username = request.POST.get('username')
@@ -34,7 +34,7 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('accounts:home')
+                return redirect('shop:shop')
             else:
                 messages.error(request, "Username not Active")
                 return redirect('accounts:login')
@@ -47,7 +47,7 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect("accounts:login")
+    return redirect("shop:shop")
 
 def regUser(form):
     '''

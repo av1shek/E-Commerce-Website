@@ -46,8 +46,8 @@
 					</table>
 
 					<p class="buttons center">
-						<button class="btn" type="button"><a href="/shop" style="color:black">Continue</a></button>
-						<button class="btn btn-inverse" type="submit" id="checkout" onclick="fun()" href="/shop/checkout/"><a href="/shop/checkout/" style="color:white">Checkout</a> </button>
+						<button class="btn" type="button"><a href="{% url 'shop:shop' %}" style="color:black">Continue</a></button>
+						<button class="btn btn-inverse" type="submit" id="checkout" onclick="fun()" href="{% url 'shop:checkout' %}"><a href="{% url 'shop:checkout' %}" style="color:white">Checkout</a> </button>
 					</p>
 				</div>
 
@@ -64,7 +64,7 @@ function fun()
 {	cart = JSON.parse(localStorage.getItem('cart'));
 	if (cart == null || (Object.keys(cart).length) == 0) {
     alert('Your cart is empty. Please add some products in your cart.');
-    document.location = "/shop";
+    document.location = "{% url 'shop:shop' %}";
 	}
 }
 

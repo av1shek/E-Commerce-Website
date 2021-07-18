@@ -1,10 +1,10 @@
 .for_img_login{
     height: 430px;
   }
-  .modal-content{
+  /* .modal-content{
      min-width: max-content !important;
      border-radius: 3rem !important;
-  }
+  } */
   .btn-forgot{
     margin-top: -10px;
     width: auto;
@@ -34,6 +34,28 @@
     margin-top: 50%;
     margin-bottom: 40%;
   }
+
+  .loginModal{
+    margin: 10px;
+  }
+
+  #loginModal, #passwdResetModal
+  {
+    max-width: 350px;
+    height: 215px;
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  #loginModal .modal-input,  #passwdResetModal .modal-input
+  {
+    width : 96%;
+    border-radius : 1cm;
+  }
+  
   
   @media (max-width: 992px){
     .disappear_login{
