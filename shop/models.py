@@ -61,4 +61,4 @@ class OrderStatus(models.Model):
 
 class Cart(models.Model):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True)
-    items_json = models.CharField(max_length=4000)
+    items_json = models.CharField(max_length=4000, default='{}')

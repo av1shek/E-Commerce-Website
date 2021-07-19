@@ -1,144 +1,147 @@
 {% extends 'shop/base.html' %}
 {% block title%}Check Out{% endblock %}
 {% block body %}
-<h4 style="text-align:center;"><span>Check Out</span></h4>
-<section class="main-content">
-	<div class="row">
-		<div class="span12">
-			<form method="post" action="#"> {% csrf_token %}
-				<input type="hidden" name="itemsjson" id="itemsjson">
-				<div class="accordion" id="accordion2">
-					<div class="accordion-group">
-						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
-						</div>
-						<div id="collapseTwo" class="accordion-body collapse">
-							<div class="accordion-inner">
-								<div class="row-fluid">
-									<div class="span6">
-										<h4>Your Personal Details</h4>
-										<div class="control-group">
-											<label class="control-label">First Name</label>
-											<div class="controls">
-												<input type="text" name="fname" placeholder="" class="input-xlarge">
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label">Last Name</label>
-											<div class="controls">
-												<input type="text" name="lname" placeholder="" class="input-xlarge">
-											</div>
-										</div>
 
-										<div class="control-group">
-											<label class="control-label">Branch</label>
-											<div class="controls">
-												<input type="text" name="branch" placeholder="" class="input-xlarge">
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label">Registration ID:</label>
-											<div class="controls">
-												<input type="text" name="reg_id"  placeholder="" class="input-xlarge">
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label" >Mobile No.</label>
-											<div class="controls">
-												<input type="text" name="mobno"  placeholder="" class="input-xlarge">
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label"><span class="required">*</span>Email Address</label>
-											<div class="controls">
-												<input type="text" name="email" placeholder="" class="input-xlarge" required>
-											</div>
-										</div>
+{% if isCartEmpty %}
 
-									</div>
-									<div class="span6">
-										<h4>Your Address</h4>
-
-										<div class="control-group">
-											<label class="control-label"><span class="required">*</span> Address 1:</label>
-											<div class="controls">
-												<input type="text"  name="address1"  placeholder="" class="input-xlarge" required>
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label">Address 2:</label>
-											<div class="controls">
-												<input type="text" name="address2"  placeholder="" class="input-xlarge">
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label"><span class="required">*</span> City:</label>
-											<div class="controls">
-												<input type="text" name="city" placeholder="" class="input-xlarge" required>
-											</div>
-										</div>
-										<div class="control-group">
-											<label class="control-label"><span class="required">*</span> Post Code:</label>
-											<div class="controls">
-												<input type="text" name="zip_code" placeholder="" class="input-xlarge" required>
-											</div>
-										</div>
-
-										<div class="control-group">
-											<label class="control-label"><span class="required">*</span> Region / State:</label>
-											<div class="controls">
-												<input type="text" name="state" placeholder="" class="input-xlarge" required>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="accordion-group">
-						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Confirm Order</a>
-						</div>
-						<div id="collapseThree" class="accordion-body collapse">
-							<div class="accordion-inner">
-								<div class="row-fluid">
-									<div class="control-group">
-										<label for="textarea" class="control-label">Comments</label>
-										<div class="controls">
-											<textarea rows="3" name="comment" id="textarea" class="span12"></textarea>
-										</div>
-									</div>
-									<button class="btn btn-inverse pull-right" type="submit">Confirm order</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
+	<section class="main-content">
+		<div class="row">
+			<div class="span12">
+				<h4 class="title"><span class="text">Your Cart is <strong>Empty</strong>, Please add some items in your cart to checkout</span></h4>
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
+
+{% else %}
+	<h4 style="text-align:center;"><span>Check Out</span></h4>
+	<section class="main-content">
+		<div class="row">
+			<div class="span12">
+				<form method="post" action="#"> {% csrf_token %}
+					<input type="hidden" name="itemsjson" id="itemsjson">
+					<div class="accordion" id="accordion2">
+						<div class="accordion-group">
+							<div class="accordion-heading">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
+							</div>
+							<div id="collapseTwo" class="accordion-body collapse">
+								<div class="accordion-inner">
+									<div class="row-fluid">
+										<div class="span6">
+											<h4>Your Personal Details</h4>
+											<div class="control-group">
+												<label class="control-label">First Name</label>
+												<div class="controls">
+													<input type="text" name="fname" placeholder="" class="input-xlarge">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Last Name</label>
+												<div class="controls">
+													<input type="text" name="lname" placeholder="" class="input-xlarge">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label" >Mobile No.</label>
+												<div class="controls">
+													<input type="text" name="mobno"  placeholder="" class="input-xlarge">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label"><span class="required">*</span>Email Address</label>
+												<div class="controls">
+													<input type="text" name="email" placeholder="" class="input-xlarge" required>
+												</div>
+											</div>
+
+										</div>
+										<div class="span6">
+											<h4>Your Address</h4>
+
+											<div class="control-group">
+												<label class="control-label"><span class="required">*</span> Address 1:</label>
+												<div class="controls">
+													<input type="text"  name="address1"  placeholder="" class="input-xlarge" required>
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Address 2:</label>
+												<div class="controls">
+													<input type="text" name="address2"  placeholder="" class="input-xlarge">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label"><span class="required">*</span> City:</label>
+												<div class="controls">
+													<input type="text" name="city" placeholder="" class="input-xlarge" required>
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label"><span class="required">*</span> Post Code:</label>
+												<div class="controls">
+													<input type="text" name="zip_code" placeholder="" class="input-xlarge" required>
+												</div>
+											</div>
+
+											<div class="control-group">
+												<label class="control-label"><span class="required">*</span> Region / State:</label>
+												<div class="controls">
+													<input type="text" name="state" placeholder="" class="input-xlarge" required>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Confirm Order</a>
+							</div>
+							<div id="collapseThree" class="accordion-body collapse">
+								<div class="accordion-inner">
+									<div class="row-fluid">
+										<div class="control-group">
+											<label for="textarea" class="control-label">Comments</label>
+											<div class="controls">
+												<textarea rows="3" name="comment" id="textarea" class="span12"></textarea>
+											</div>
+										</div>
+										<button class="btn btn-inverse pull-right" type="submit">Confirm order</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+{% endif %}
+
 {% endblock %}
 
 {% block js %}
 <script>
-cart = JSON.parse(localStorage.getItem('cart'));
+let cart = {{ cart|safe }}
 
 // Redirect to home page when cart is empty and if not form is submitted and then
 // redirect to print receipt and clear the cart
 if (cart == null || (Object.keys(cart).length) == 0)
 {
-    alert('Your cart is empty. Please add some products in your cart.');
-    document.location = "{% url 'shop:shop' %}";
+    // alert('Your cart is empty. Please add some products in your cart.');
+    // document.location = "{% url 'shop:shop' %}";
 }
-
 else
 {
-    cart = JSON.parse(localStorage.getItem('cart'));
+    // cart = JSON.parse(localStorage.getItem('cart'));
 	$('#itemsjson').val(JSON.stringify(cart));
 	{% if thank %}
+	
+	cart = {}; // if order is successful clear cart
+	updatecart(cart).then((res) =>{ })
+	.catch((err) =>{ console.log(err); });
 	alert('Thanks for ordering with us. Your order is is {{id}}. Use it to track your order using our order tracker');
-	localStorage.clear();
 	document.location = "{% url 'shop:receipt' id %}";
 	{% endif %}
 }

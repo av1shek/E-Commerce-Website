@@ -7,11 +7,11 @@
 
         <h2>Payment status regarding your order Id {{response.ORDERID}}</h2>
         {% if response.RESPCODE == '01' %}
-        <div class="p-3 mb-2 bg-gradient-success text-white">
-            Thanks for ordering with us. Your order is {{response.ORDERID}}. Use it to track your order using our order tracker
+        <div class="alert alert-success">
+            Thanks for ordering with us. 
         </div>
         
-        <a type="button" href="{% url 'shop:receipt' response.ORDERID %}" class="btn btn-primary">Get receipt</a>
+        <a type="button" href="{% url 'shop:receipt' response.ORDERID %}" class="btn btn-primary" target="_blank">Get receipt</a>
         {% else %}
         <div class="p-3 mb-2 bg-gradient-danger text-white">
         ORDER FAILURE<br>
@@ -26,14 +26,11 @@
 {% endblock %}
 {% block js %}
 <script>
-    cart = JSON.parse(localStorage.getItem('cart'));
-    if (cart == null || (Object.keys(cart).length) == 0)
-    {
-        document.location = "{% url 'shop:shop'  %}";
-    }
+    
     {% if response.RESPCODE == '01' %}
-	alert('Thanks for ordering with us. Your order is {{response.ORDERID}}. Use it to track your order using our order tracker');
-	localStorage.clear();
+	cart = {}; // if order is successful clear cart
+	updatecart(cart).then((res) =>{ })
+	.catch((err) =>{ console.log(err); });
 	{% endif %}
 
 

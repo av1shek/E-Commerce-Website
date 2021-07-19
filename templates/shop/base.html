@@ -105,13 +105,20 @@
 			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
-                    	<form id="Regform" action="{% url 'accounts:login' %}" method="POST" class="">
+                    	<form id="Regform" action="{% url 'accounts:login' %}?next={% firstof request.path 'shop:shop' %}" method="POST" class="">
+						{% comment %} <a href="{% url auth_login %}?next={% firstof request.path '/' %}">Login</a> {% endcomment %}
                           <div class="form-group">
                             {% csrf_token %}
                             {% if messages %}
                             <div id="message">
                               {% for message in messages %}
-                                <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+								<div class="alert {% if message.tags %}alert-{{ message.tags }} alert-dismissible show" {% endif %} role="alert">
+									<strong>{{message}}</strong> 
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+                                {% comment %} <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div> {% endcomment %}
                               {% endfor %}
                             </div>
                             {% endif %}
@@ -262,6 +269,23 @@
 
 			await fetch(url, params).then(response => response.json()).then(data => {qnty=data; return qnty;} );
 			return qnty;
+		}
+
+		async function updatecart(items_json)
+		{
+			var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+			let url = '{% url 'shop:cartupdate' %}';
+			items_json = JSON.stringify(items_json);
+			let params = {
+				method: 'POST',
+				body: items_json,
+				headers: { 'Accept': 'application/json, text/plain',
+					'Content-Type': 'application/json',
+					"X-CSRFToken": csrftoken },
+				}
+
+			await fetch(url, params).then(response => response.json()).then(data => {res=data; return res;} );
+			return res;
 		}
 
 		$(document).ready(function () {

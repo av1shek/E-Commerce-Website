@@ -135,32 +135,33 @@ let qnty = 0;
 // Add the item to cart after checking its availability in database
 function additem(idstr)
 {
-	if(localStorage.getItem('cart') == null ){ var cart = {}; }
-	else{ cart = JSON.parse(localStorage.getItem('cart')); }
+	{% if not user.is_authenticated %}
+		alert("Please login first");
+		return;
+	{% else %}
+		let cart = {{ cart|safe }}
+		console.log("clicked");
+		let product_img = $('#product_img')[0].getAttribute("src");
+		let product_name = $('#product_name')[0].innerText;
+		let qnty = parseInt($('#' + idstr + 'qnty')[0].value);
+		let product_price = parseInt($('#product_price')[0].innerText);
+		let size = $('#' + idstr + 'size')[0].value;
+		let color = $('#' + idstr + 'color')[0].value;
 
-
-	let product_img = $('#product_img')[0].getAttribute("src");
-	let product_name = $('#product_name')[0].innerText;
-	let qnty = parseInt($('#' + idstr + 'qnty')[0].value);
-	let product_price = parseInt($('#product_price')[0].innerText);
-	let size = $('#' + idstr + 'size')[0].value;
-	let color = $('#' + idstr + 'color')[0].value;
-
-	//Send post request to database
-	checkdb(idstr, size, color).then(qnty_avl =>{
-	if(qnty_avl>=qnty)
-		{
-			id = parseInt(idstr.slice(2))
-			idstr = idstr + '-' + size + '-' + color;
-			if (cart[idstr] !=undefined)  { cart[idstr][2] = parseInt(cart[idstr][2]) + parseInt(qnty); }
-			else  { cart[idstr] = [product_img, product_name, qnty, product_price, complete_word(size), complete_word(color), id, size+color];  }
-			localStorage.setItem('cart', JSON.stringify(cart));
-			window.location.href = "{% url 'shop:cart' %}"
-		}
-	else{ alert("Sorry! No more quantity available.");   }
-	}
-	);
-
+		//Send post request to database
+		checkdb(idstr, size, color).then(qnty_avl =>{
+			if(qnty_avl>=qnty)
+			{
+				id = parseInt(idstr.slice(2))
+				idstr = idstr + '-' + size + '-' + color;
+				if (cart[idstr] !=undefined)  { cart[idstr][2] = parseInt(cart[idstr][2]) + parseInt(qnty); }
+				else  { cart[idstr] = [product_img, product_name, qnty, product_price, complete_word(size), complete_word(color), id, size+color];  }
+				updatecart(cart).then((res) =>{ window.location.href = "{% url 'shop:cart' %}" })
+				.catch((err) =>{ console.log(err); alert(err) });
+			}
+			else{ alert("Sorry! No more quantity available.");   }
+		});
+	{% endif %}
 }
 
 </script>

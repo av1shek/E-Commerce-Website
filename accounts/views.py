@@ -34,13 +34,13 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('shop:shop')
+                return redirect(request.GET.get('next', "shop:shop"))
             else:
                 messages.error(request, "Username not Active")
                 return redirect('accounts:login')
         else:
             messages.error(request, "Invalid Credentials")
-            return render(request, 'accounts/login.html', {'user_login':True})
+            return render(request, 'shop/index.html', {'user_login':True})
     return render(request, 'accounts/login.html')
 
 
@@ -114,7 +114,7 @@ def regUser(form):
                         zip_code=form['city'],
                         state=form['state'])
     customer.save()
-    cart = Cart(customer=customer, items_json='')
+    cart = Cart(customer=customer, items_json='{}')
     cart.save()
     return user
 

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse  
 from django.db.models import Q
-from .models import Product, Orders, Message, OrderStatus
+from .models import Product, Orders, Message, OrderStatus, Cart
+from accounts.models import User, Customer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 import json
@@ -44,17 +45,59 @@ def index(request):
 def product_details(request, myid):
     # Fetch the product using id
     product = Product.objects.filter(id=myid)
-    return render(request, 'shop/product_detail.html', {'product':product[0]})
+    params = {}
+    params['product'] = product[0]
+    if request.user.is_authenticated:
+        try:
+            user = User.objects.get(username=request.user)
+            customer = Customer.objects.get(user=user)
+            cart = Cart.objects.get(customer=customer)
+            params['cart'] = cart.items_json
+        except Exception as e:
+            print(e)
+    return render(request, 'shop/product_detail.html', params)
+
+@login_required
+def cart_update(request):
+    json_data = json.loads(request.body.decode("utf-8"))
+    print(json_data)
+    params = {}
+    try:
+        user = User.objects.get(username=request.user)
+        customer = Customer.objects.get(user = user)
+        cart = Cart.objects.get(customer=customer)
+        cart.items_json = json.dumps(json_data);
+        cart.save()
+        params['success'] = True
+    except:
+        params['success'] = False
+    return HttpResponse(json.dumps(params), content_type="application/json")
+
 
 # Display cart
+@login_required
 def cart(request):
-    return render(request, 'shop/cart.html')
+    params = {}
+    params['isCartEmpty'] = False
+    try:
+        user = User.objects.get(username=request.user)
+        customer = Customer.objects.get(user = user)
+        cart = Cart.objects.get(customer=customer)
+        print("check ----------- ",cart.items_json)
+        if cart.items_json == '' or cart.items_json == '{}':
+            params['isCartEmpty'] = True
+        else:
+            params['cart'] = cart.items_json
+    except Exception as e:
+        params['error'] = e
+    return render(request, 'shop/cart.html', params)
 
 
 # Utility function which will accept post request generated
 # from javascript file and return the available qunatity of requested
 # product id after checking data
 # @csrf_exempt
+@login_required
 def checkdb(request):
     data = json.loads(request.body.decode("utf-8"))
     id = int(data['id'])
@@ -63,6 +106,7 @@ def checkdb(request):
     return HttpResponse(qnty)
 
 # Generate receipt
+@login_required
 def receipt(request, orderid):
     order = Orders.objects.filter(order_id=int(orderid.split('-')[1]))[0]
     items_json = json.loads(order.items_json)
@@ -94,6 +138,7 @@ def contact(request):
 
 
 # Gives the order status after fetching from database
+@login_required
 def track(request):
     if (request.method == "POST"):
         try:
@@ -118,6 +163,7 @@ def getOrderId():
 
 
 # Updates the product database
+
 def updateProductDb(id, types, qnty):
     product = Product.objects.filter(id=id)[0]
     if types == 'sblue':
@@ -199,6 +245,7 @@ def handlerequest(request):
 # Handle the checkout when paytm payment integration
 # when merchant id and key is available uncomment this comment the
 # the function defined above with same
+@login_required
 def checkout(request):
     if(request.method=="POST"):
         global orderObj
@@ -240,7 +287,15 @@ def checkout(request):
         }
         param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
         return render(request, 'shop/paytm.html', {'param_dict': param_dict})
-    return render(request, 'shop/checkout.html')
+    else:
+        user = User.objects.get(username=request.user)
+        customer = Customer.objects.get(user = user)
+        cart = Cart.objects.get(customer=customer)
+        params = {}
+        params['cart'] = cart.items_json
+        if cart.items_json == '' or cart.items_json == '{}':
+            params['isCartEmpty'] = True
+    return render(request, 'shop/checkout.html', params)
 
 
 def test(request):
