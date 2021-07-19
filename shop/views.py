@@ -157,6 +157,8 @@ def track(request):
 
 
 def getOrderId():
+    # may have to mention absolute path on the server
+    # also note that same id can not be reused for different orders ----------------------- IMPORTANT
     with open("media/shop/orderid.txt","r") as f:
         a = int(f.read())
     with open("media/shop/orderid.txt","w") as f:
@@ -277,7 +279,7 @@ def checkout(request):
         print(order_id)
 
         # Request paytm to transfer the amount to your account after payment by
-        # change callback url at time of production
+        # change callback url at time of production ----------------------------------------- IMPORTANT
         param_dict = {
             'MID': MID,
             'ORDER_ID': str(order_id),
