@@ -15,5 +15,4 @@ urlpatterns = [
     path('track/', views.track, name="track"),
     path('receipt/<str:orderid>', views.receipt, name="receipt"),
     path('handlerequest/', views.handlerequest, name="handlerequest"),
-    path('test/', views.test, name="test"),
 ]

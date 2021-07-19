@@ -129,8 +129,6 @@
 			if(qnty_avl > parseInt(cart[item][2]) )
 			{
 				cart[item][2] = parseInt(cart[item][2]) + 1;
-				
-				//localStorage.setItem('cart', JSON.stringify(cart));
 				updatecart(cart).then((res) =>{ })
 				.catch((err) =>{ console.log(err); });
 			}
@@ -145,19 +143,15 @@
 	// Decrease the quantity of selected product
 	function decr(item, e)
 	{
-		//cart = JSON.parse(localStorage.getItem('cart'));
 		if(parseInt(cart[item][2]) > 1)
 		{
 			cart[item][2] = parseInt(cart[item][2]) - 1;
 			updatecart(cart).then((res) =>{ })
 			.catch((err) =>{ console.log(err); });
-			
-			//localStorage.setItem('cart', JSON.stringify(cart));
 		}
 		else
 		{
 			delete cart[item];
-			//localStorage.setItem('cart', JSON.stringify(cart));
 			updatecart(cart).then((res) =>{ })
 			.catch((err) =>{ console.log(err); });
 		}
@@ -167,9 +161,7 @@
 	// Delete the item from cart
 	function remove(item)
 	{
-		//cart = JSON.parse(localStorage.getItem('cart'));
 		delete cart[item];
-		//localStorage.setItem('cart', JSON.stringify(cart));
 		updatecart(cart).then((res) =>{ })
 		.catch((err) =>{ console.log(err); });
 		update();
@@ -180,18 +172,6 @@
 
 
 {% endif %}
-
-/* fun();
-// Alert and redirect if cart is empty
-function fun()
-{	cart = JSON.parse(localStorage.getItem('cart'));
-	if (cart == null || (Object.keys(cart).length) == 0) {
-    alert('Your cart is empty. Please add some products in your cart.');
-    document.location = "{% url 'shop:shop' %}";
-	}
-}*/
-
-// Populate the DOM with cart items
 
 </script>
 

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.urls import reverse  
 from django.db.models import Q
 from .models import Product, Orders, Message, OrderStatus, Cart
 from accounts.models import User, Customer
@@ -10,9 +9,10 @@ import smtplib
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from PayTm import Checksum
-from winter.settings import MERCHANT_KEY, MID
+from winter.settings import MERCHANT_KEY, MID, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 orderObj = None
+
 
 
 # Display the home page after fetching products
@@ -57,6 +57,8 @@ def product_details(request, myid):
             print(e)
     return render(request, 'shop/product_detail.html', params)
 
+
+# Update the cart of customer
 @login_required
 def cart_update(request):
     json_data = json.loads(request.body.decode("utf-8"))
@@ -128,9 +130,10 @@ def contact(request):
         msg = request.POST.get('message', 'default')
         msgObj = Message(name=name, email=email, message=msg)
         msgObj.save()
+        content = f"Subject: Feedback from E-Commerce Website\n\nSender Mail - {email}\n\n Message - {msg}"
         thank = True
         try:
-            sendEmail('navodayanabhishek@gmail.com', msg)
+            sendEmail(EMAIL_HOST_USER, content ) # send email to admin
         except Exception as e:
             print(e)
         return render(request, 'shop/contact.html', {'thank': thank})
@@ -198,12 +201,12 @@ def find_qnty(id, types):
         return product.lblack
 
 def sendEmail(to, content):
-    # It sends an email
+    # It sends an email to the specified email address
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    server.login('singh_821916@student.nitw.ac.in','your-password-here')
-    server.sendmail('singh_821916@student.nitw.ac.in', to, content)
+    server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+    server.sendmail(EMAIL_HOST_USER, to, content)
     server.close()
 
 # This is for paytm payment integration
@@ -296,7 +299,3 @@ def checkout(request):
         if cart.items_json == '' or cart.items_json == '{}':
             params['isCartEmpty'] = True
     return render(request, 'shop/checkout.html', params)
-
-
-def test(request):
-    return render(request, 'shop/base.html')

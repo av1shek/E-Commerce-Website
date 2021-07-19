@@ -127,14 +127,9 @@ let cart = {{ cart|safe }}
 
 // Redirect to home page when cart is empty and if not form is submitted and then
 // redirect to print receipt and clear the cart
-if (cart == null || (Object.keys(cart).length) == 0)
-{
-    // alert('Your cart is empty. Please add some products in your cart.');
-    // document.location = "{% url 'shop:shop' %}";
-}
+if (cart == null || (Object.keys(cart).length) == 0) {}
 else
 {
-    // cart = JSON.parse(localStorage.getItem('cart'));
 	$('#itemsjson').val(JSON.stringify(cart));
 	{% if thank %}
 	

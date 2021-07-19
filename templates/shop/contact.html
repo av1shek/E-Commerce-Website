@@ -24,7 +24,7 @@
 					</div>
 					<div class="span7">
 						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-						<form method="post" action="/shop/contact/">{% csrf_token %}
+						<form method="post" action="{% url 'shop:contact' %}">{% csrf_token %}
 							<fieldset>
 								<div class="clearfix">
 									<label for="name"><span>Name:</span></label>
